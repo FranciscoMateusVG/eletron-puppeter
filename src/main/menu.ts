@@ -5,6 +5,7 @@ import {
   BrowserWindow,
   MenuItemConstructorOptions,
 } from 'electron';
+import puppeteer from 'puppeteer';
 
 interface DarwinMenuItemConstructorOptions extends MenuItemConstructorOptions {
   selector?: string;
@@ -106,8 +107,10 @@ export default class MenuBuilder {
         {
           label: 'Reload',
           accelerator: 'Command+R',
-          click: () => {
-            this.mainWindow.webContents.reload();
+          click: async () => {
+            const browser = await puppeteer.launch({ headless: false });
+            const page = await browser.newPage();
+            await page.goto('https://example.com');
           },
         },
         {
